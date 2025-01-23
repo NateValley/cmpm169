@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment X - Subject/Topic</title>
+	<title>Their New World - (Vector Art, Animation & Interactivity)</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -26,13 +26,21 @@
 	<script type="text/javascript" src="./js/project.js" DEFER></script>
 	<!-- Use me for a p5.js project -->
 	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
+
+	<script src="./js/mem.js"></script>
+	<script src="./js/state.js"></script>
+	<script src="./js/site.js"></script>
+	<script src="./js/source.js"></script>
+	<script src="./js/forum.js"></script>
+	<script src="./js/world.js"></script>
+
 </head>
 <body>
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
 
-			<h1>Experiment X - Subject/Topic</h1>
+			<h1>Experiment 2 - Vector Art, Animation & Interactivity</h1>
 
 			<div class="minor-section">
 				<div id="canvas-container">
@@ -45,17 +53,25 @@
 
 			<div class="minor-section">
 				<h2>Description</h2>
-				<p>What are you trying to acomplish with this experiment?</p>
+				<p>With this experiment, I am trying to simulate the way that creatures with different behaviors would thrive depending on randomly generated environments.
+					I wanted to see which behavior would cause a type of Mem to thrive against the others.
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Technical</h2>
-				<p>Describe in detail what you did technically and how it works?</p>
+				<p>Each creature- a Mem- runs on a state machine, that keeps track of certain conditions that will affect the way the Mem acts. The different colors of Mems are their "types", and I had each type of Mem behave differently.
+					Currently, when a Mem has the resources, they build a structure- called a Site- that belongs to that Mem's type.
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment.</p>
+				<p>In terms of successes, I'm happy to say that so far, I have gotten the Mems to complete a cycle of exploration before they stop.
+					I struggled with this experiment due to the scope of this project, and I plan on continuing and adapting this project for Experiment 3,
+					 as that assignment will be focused on random generation. Reflecting back on the work I've done, I'm happy to have what I have, though I
+					wish that I had considered the state machine structure sooner rather than later, because that definitely set me back.
+				</p>
 			</div>
 
 		</section>
