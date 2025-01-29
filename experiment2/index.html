@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment X - Subject/Topic</title>
+	<title>Their Newer World - (Generative Methods)</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -26,13 +26,21 @@
 	<script type="text/javascript" src="./js/project.js" DEFER></script>
 	<!-- Use me for a p5.js project -->
 	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
+
+	<script src="./js/mem.js"></script>
+	<script src="./js/state.js"></script>
+	<script src="./js/site.js"></script>
+	<script src="./js/source.js"></script>
+	<script src="./js/forum.js"></script>
+	<script src="./js/world.js"></script>
+
 </head>
 <body>
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
 
-			<h1>Experiment X - Subject/Topic</h1>
+			<h1>Experiment 3 - Generative Methods</h1>
 
 			<div class="minor-section">
 				<div id="canvas-container">
@@ -45,17 +53,25 @@
 
 			<div class="minor-section">
 				<h2>Description</h2>
-				<p>What are you trying to acomplish with this experiment?</p>
+				<p>With this experiment, I am trying to simulate the way that creatures with different behaviors would thrive depending on randomly generated environments.
+					I wanted to see which behavior would cause a type of Mem to thrive against the others. This is a newer version of my last piece.
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Technical</h2>
-				<p>Describe in detail what you did technically and how it works?</p>
+				<p>Each creature- a Mem- runs on a weighted state machine that will "randomly" affect the way the Mem acts. The navy blue circles placed on the map are Sources, which the Mems gather resources from in order to build.
+					When a Mem has the resources, they can build a structure called a Site, that belongs to that Mem's type and will spawn more of those Mems. Built off of the last piece, this one has 3 different types of Mems with different behaviors. The Red Mems always group up into
+					groups of 3, and only the group leader performs actions. They are also faster in terms of speed and their Sites spawn new Mems faster. The Green Mems are focused on gathering resources, and have both a faster gathering speed and higher resource capacity
+					on their bodies, so they are built for gathering. Lastly, the Orange Mems tend to build more, and are mostly focused on getting resources to build as many Sites as they can at a time.
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment.</p>
+				<p>I'm extremely happy with the progress I've made on this experiment, as the last one did not go as well as planned. Taking into account the fact that I was inspired by Screeps: World, it was really fun learning how to get the
+					behaviors of the Mems to work after refactoring my state machine. I believe I learned a lot throughout the process of creating this piece, both in the last experiment and this one.
+				</p>
 			</div>
 
 		</section>
