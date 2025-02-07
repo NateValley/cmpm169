@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment X - Subject/Topic</title>
+	<title>Their Newer World - (Generative Methods)</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -20,19 +20,22 @@
 	<!-- Load p5.js library -->
 	<script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.js"></script>
 
+	<script src="p5.sound.min.js"></script>
+
 	<!-- Link to javascript files - DEFER waits until all elements are rendered -->
     <script type="text/javascript" src="../js/site.js" DEFER></script>
 	<!-- Use me for a JavaScript OOP Project -->
 	<script type="text/javascript" src="./js/project.js" DEFER></script>
 	<!-- Use me for a p5.js project -->
 	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
+
 </head>
 <body>
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
 
-			<h1>Experiment X - Subject/Topic</h1>
+			<h1>Experiment 4 - Images, Video, & Sound Art</h1>
 
 			<div class="minor-section">
 				<div id="canvas-container">
@@ -45,17 +48,32 @@
 
 			<div class="minor-section">
 				<h2>Description</h2>
-				<p>What are you trying to acomplish with this experiment?</p>
+				<p>
+					This Experiment plays Kermit and Rowlf's 'I Hope that Somethin' Better Comes Along', and the song affects both the background and soundwaves.
+					The soundwaves' color- and very slightly, opacity- changes depending on the current frequency of the song. The background's dimness is affected
+					by the volume of the song at the time. The song itself could be found as controversial, but The Muppets original movie from 1979 is a comfort movie of mine,
+					and I grew up on these songs. I found that this song was the most interesting in terms of using it with an audial-visual medium.
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Technical</h2>
-				<p>Describe in detail what you did technically and how it works?</p>
+				<p>
+					As previously mentioned, the soundwaves' color is affected by the frequencies. The lower frequencies adjust the color to lean towards the brown shade that Rowlf is,
+					while the higher frequencies are reserved for a Kermit shade of green. In the medium frequencies, the colors mix. For the opacity of the background, I simply added a
+					black rectangle, and adjusted its opacity using the volume of the song. As you can see, I adjusted the waves so that they are smoother and don't peak too high, as I wanted
+					the image to still be visible even with the waves reacting a lot. I also have the song looped using the loop() function from the p5.js sound library.
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment.</p>
+				<p>In this Experiment, I simply just wanted to see how it felt to work with an audio visualizer, as I've never
+					had the chance to do that before. I definitely could have spent more time on this, but recently I've had higher priorities,
+					so I understand that this could have been more polished had I had the time. Despite that, I can appreciate the way that I was
+					able to utilize the p5.js sound library in particular for this project, and I feel comfortable incorporating more of it in the
+					near future, possibly on the next Experiment.
+				</p>
 			</div>
 
 		</section>

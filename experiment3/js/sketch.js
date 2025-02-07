@@ -1,29 +1,13 @@
-// sketch.js - purpose and description here
-// Author: Your Name
-// Date:
-
-// Here is how you might set up an OOP p5.js project
-// Note that p5.js looks for a file called sketch.js
-
-// Constants - User-servicable parts
-// In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
-
 // Globals
 let myInstance;
 let canvasContainer;
 var centerHorz, centerVert;
 
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
-    }
+let img, fft, amp;
 
-    myMethod() {
-        // code to run when method is called
-    }
+function preload() {
+  img = loadImage('rowlfkermit.jfif');
+  song = loadSound('I Hope That Somethin Better Comes Along - Rowlf the Dog and Kermit the Frog.mp3');
 }
 
 function resizeScreen() {
@@ -42,38 +26,83 @@ function setup() {
   canvas.parent("canvas-container");
   // resize canvas is the page is resized
 
-  // create an instance of the class
-  myInstance = new MyClass("VALUE1", "VALUE2");
-
   $(window).resize(function() {
     resizeScreen();
   });
   resizeScreen();
+
+  song.loop();
+  fft = new p5.FFT();
+  fft.setInput(song);
+  
+  amp = new p5.Amplitude();
+  amp.setInput(song);
 }
 
-// draw() function is called repeatedly, it's the main animation loop
 function draw() {
-  background(220);    
-  // call a method on the instance
-  myInstance.myMethod();
+  background(0);
 
-  // Set up rotation for the rectangle
-  push(); // Save the current drawing context
-  translate(centerHorz, centerVert); // Move the origin to the rectangle's center
-  rotate(frameCount / 100.0); // Rotate by frameCount to animate the rotation
-  fill(234, 31, 81);
+  image(img, 0, 0, canvasContainer.width(), (canvasContainer.width() / img.width) * img.height);
+
+  let spectrum = fft.analyze();
+  
+  let vol = amp.getLevel();
+  let opacity = map(vol, 0, 0.3, 25, 425, true);
+  
+  // BLACK BACKGROUND
+  beginShape();
   noStroke();
-  rect(-125, -125, 250, 250); // Draw the rectangle centered on the new origin
-  pop(); // Restore the original drawing context
-
-  // The text is not affected by the translate and rotate
-  fill(255);
-  textStyle(BOLD);
-  textSize(140);
-  text("p5*", centerHorz - 105, centerVert + 40);
-}
-
-// mousePressed() function is called once after every time a mouse button is pressed
-function mousePressed() {
-    // code to run when mouse is pressed
+  fill(0, 0, 0, 250 - opacity);
+  vertex(0, 0);
+  vertex(width, 0);
+  vertex(width, height);
+  vertex(0, height);
+  endShape();
+  
+  // Calculate color based on frequency spectrum
+  let rowlfFreq = fft.getEnergy(20, 600); // Low frequencies (bass)
+  let kermitFreq = fft.getEnergy(600, 2000); // Mid frequencies
+  let highFreq = fft.getEnergy(2000, 20000);
+  
+  // Map frequencies to RGB values
+  let redValue = map(rowlfFreq, 44, 107, 90, 150);  // Brownish colors for low frequencies
+  let greenValue = map(kermitFreq, 20, 185, 120, 185);  // Greenish for mid frequencies
+  let blueValue = map(highFreq, 18, 99, 100, 150);  // A mix for high frequencies
+  
+  // stroke(90, 38 ,33, 125 - opacity);
+  // strokeWeight(3);
+  noStroke();
+  fill(redValue, greenValue, blueValue, 225 - opacity);
+  
+  beginShape();
+  vertex(0, height);
+  
+  let firstX = map(0, 0, spectrum.length / 4, 0, width);
+  let firstY = map(spectrum[0], 0, 125, height - 6, 0);
+  curveVertex(firstX, firstY);
+  curveVertex(firstX, firstY);
+  curveVertex(firstX, firstY);
+  
+  let lastX;
+  let lastY;
+  
+  let dampingFactor = 0.6; // Lower values make it less reactive
+  for (let i = 0; i < spectrum.length / 4; i+=5)
+  {
+    let x = map(i , 0, spectrum.length / 4, 0, width);
+    
+    let y = map(spectrum[i] * dampingFactor, 0, 125, height - 8, 20);
+    
+    curveVertex(x, y);
+    
+    lastX = x;
+    lastY = y;
+  }
+  curveVertex(lastX, lastY);
+  curveVertex(lastX, lastY);
+  curveVertex(lastX, lastY);
+  
+  vertex(width, height);
+  
+  endShape(CLOSE);
 }
