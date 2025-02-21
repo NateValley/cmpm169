@@ -2,26 +2,40 @@ h1, h2 {
   margin: 0;
   padding: 0;
   /* font-size: 1.2em; */
-  font-weight: lighter;
+  color: #FFCC99;
+}
+
+body {
+	background-color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0;
 }
 
 #content {
   width: calc(100% - 30px);
-  margin: 10px;080;
+  margin: 10px;
   padding: 10px;
-  border: solid 1px #808;
-  font-family: sans-serif;
+  border: solid 2px #FFCC99;
+  font-family: 'Courier New', Courier, monospace;
+  color: #FFCC99;
 }
 
 .minor-section {
-  margin: 10px;
-  padding: 10px;
-  border: solid 1px #A0A0A0;
+  margin: 8px;
+  padding: 16px;
+  border: solid 2px #FFCC99;
   border-radius: 10px;
+  font-size: 1.1em;
 }
 
 .minor-section h2 {
-  font-size: 1.2em;
+  margin-top: 2px;
+  font-size: 1.6em;
+  text-decoration: underline;
+  text-underline-offset: 12px;
 }
 
 /* Set the image to be responsive */
@@ -54,4 +68,13 @@ body.is-fullscreen #canvas-container {
   height: 100vh !important;
   margin: 0; /* Remove any default margins */
   z-index: 1000; /* Ensure it's above other content */
+}
+
+a {
+	color: #FFCC99;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #FFCC99;
 }
