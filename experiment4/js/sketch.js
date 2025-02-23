@@ -1,149 +1,108 @@
-// sketch.js - 
-// Author: Ashley Knapp
-// Date: 2-10-25
- 
-// Consts
-const rotationScale = 0.005;
-
 // Globals
+let myInstance;
 let canvasContainer;
 var centerHorz, centerVert;
-let waterShader;
-let isDonutFart = true;
-let isCubePee = true;
+
+let img, fft, amp;
 
 function preload() {
-	waterShader = loadShader("shaders/water.vert", "shaders/water.frag");
-	marioImg = loadImage('./assets/MPSS_Mario.webp');
-	ratImg = loadImage('./assets/ratatouilleimg.jfif');
+  img = loadImage('rowlfkermit.jfif');
+  song = loadSound('I Hope That Somethin Better Comes Along - Rowlf the Dog and Kermit the Frog.mp3');
 }
 
 function resizeScreen() {
-	centerHorz = canvasContainer.width() / 2; // Adjusted for drawing logic
-	centerVert = canvasContainer.height() / 2; // Adjusted for drawing logic
-	console.log("Resizing...");
-	resizeCanvas(canvasContainer.width(), canvasContainer.height());
-	// redrawCanvas(); // Redraw everything based on new size
+  centerHorz = canvasContainer.width() / 2; // Adjusted for drawing logic
+  centerVert = canvasContainer.height() / 2; // Adjusted for drawing logic
+  console.log("Resizing...");
+  resizeCanvas(canvasContainer.width(), canvasContainer.height());
+  // redrawCanvas(); // Redraw everything based on new size
 }
 
 // setup() function is called once when the program starts
 function setup() {
-	// place our canvas, making it fit our container
-	canvasContainer = $("#canvas-container");
-	let canvas = createCanvas(canvasContainer.width(), canvasContainer.height(), WEBGL);
-	canvas.parent("canvas-container");
-	// resize canvas is the page is resized
+  // place our canvas, making it fit our container
+  canvasContainer = $("#canvas-container");
+  let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
+  canvas.parent("canvas-container");
+  // resize canvas is the page is resized
 
-	$(window).resize(function() {
-		resizeScreen();
-	});
-	resizeScreen();
+  $(window).resize(function() {
+    resizeScreen();
+  });
+  resizeScreen();
 
-
-	// Set up shader
-	noStroke();
-	
-	shader(waterShader);
-	
-	waterShader.setUniform("resolution", [canvasContainer.width, canvasContainer.height]);
-
-	// Scale and initiate images
-	imageMode(CENTER);
-	marioImg.resize(0.3 * marioImg.width, 0.3 * marioImg.height);
-	ratImg.resize(0.435 * ratImg.width, 0.435 * ratImg.height);
-
-
+  song.loop();
+  fft = new p5.FFT();
+  fft.setInput(song);
+  
+  amp = new p5.Amplitude();
+  amp.setInput(song);
 }
 
-// draw() function is called repeatedly, it's the main animation loop
 function draw() {
-	// background(255, 255, 200);
-	background(200);
+  background(0);
 
-	// Update water texture
-	waterShader.setUniform("time", millis()/100);
+  image(img, 0, 0, canvasContainer.width(), (canvasContainer.width() / img.width) * img.height);
 
-	resetShader();
-
-	// Draw floating plumber
-	push();
-	translate(-250, 10 * sin(frameCount * 0.1), 0);
-	image(marioImg, 0, 0);
-	pop();
-	
-	// Draw floating rat
-	push();
-	translate(250, 10 * sin(frameCount * -0.1), 0);
-	image(ratImg, 0, 0);
-	pop();
-
-	shader(waterShader);
-
-	// Draw rotating box
-	push();
-
-	if (isCubePee) {
-		changeCubeYellow();
-	} else {
-		changeCubeGreen()
-	}
-
-	translate(-250, 10 * sin(frameCount * 0.1), 0);
-	rotateX(frameCount * rotationScale);
-	rotateY(frameCount * rotationScale);
-	box(centerVert/1.5);
-	pop();
-
-	// Draw rotating torus
-	push();
-
-	if(isDonutFart) {
-		changeDonutGreen();
-	} else {
-		changeDonutYellow();
-	}
-
-	translate(250, 10 * sin(frameCount * -0.1), 0);
-	rotateX(frameCount * rotationScale * 1.2);
-	rotateY(frameCount * rotationScale * 1.2);
-	torus(centerVert/1.8, 40);
-	pop();
-}
-
-// -------------------------------------------------
-function mousePressed() {
-	isCubePee = !isCubePee;
-	isDonutFart = !isDonutFart;
-}
-
-function changeCubeGreen() {
-	waterShader.setUniform("baseColor", [0.6, 0.65, 0.3]);
-	waterShader.setUniform("peakColor", [0.2, 0.5, 0.2]);
-	waterShader.setUniform("alph", 0.75);
-	waterShader.setUniform("speedScalar", 0.5);
-	waterShader.setUniform("cellSize", 2);
-}
-
-function changeCubeYellow() {
-	waterShader.setUniform("baseColor", [0.8, 0.6, 0.4]);
-	waterShader.setUniform("peakColor", [0.85, 0.75, 0.5]);
-	waterShader.setUniform("alph", 0.69);
-	waterShader.setUniform("speedScalar", .5);
-	waterShader.setUniform("cellSize", 3);
-}
-
-function changeDonutGreen() {
-	waterShader.setUniform("baseColor", [0.6, 0.65, 0.3]);
-	waterShader.setUniform("peakColor", [0.2, 0.5, 0.2]);
-	waterShader.setUniform("alph", 0.8);
-	waterShader.setUniform("speedScalar", 0.3);
-	waterShader.setUniform("cellSize", 6);
-}
-
-function changeDonutYellow() {
-	waterShader.setUniform("baseColor", [0.75, 0.55, 0.3]);
-	waterShader.setUniform("peakColor", [0.9, 0.8, 0.5]);
-	waterShader.setUniform("alph", 0.69);
-	waterShader.setUniform("speedScalar", .5);
-	waterShader.setUniform("cellSize", 10);
+  let spectrum = fft.analyze();
+  
+  let vol = amp.getLevel();
+  let opacity = map(vol, 0, 0.3, 25, 425, true);
+  
+  // BLACK BACKGROUND
+  beginShape();
+  noStroke();
+  fill(0, 0, 0, 250 - opacity);
+  vertex(0, 0);
+  vertex(width, 0);
+  vertex(width, height);
+  vertex(0, height);
+  endShape();
+  
+  // Calculate color based on frequency spectrum
+  let rowlfFreq = fft.getEnergy(20, 600); // Low frequencies (bass)
+  let kermitFreq = fft.getEnergy(600, 2000); // Mid frequencies
+  let highFreq = fft.getEnergy(2000, 20000);
+  
+  // Map frequencies to RGB values
+  let redValue = map(rowlfFreq, 44, 107, 90, 150);  // Brownish colors for low frequencies
+  let greenValue = map(kermitFreq, 20, 185, 120, 185);  // Greenish for mid frequencies
+  let blueValue = map(highFreq, 18, 99, 100, 150);  // A mix for high frequencies
+  
+  // stroke(90, 38 ,33, 125 - opacity);
+  // strokeWeight(3);
+  noStroke();
+  fill(redValue, greenValue, blueValue, 225 - opacity);
+  
+  beginShape();
+  vertex(0, height);
+  
+  let firstX = map(0, 0, spectrum.length / 4, 0, width);
+  let firstY = map(spectrum[0], 0, 125, height - 6, 0);
+  curveVertex(firstX, firstY);
+  curveVertex(firstX, firstY);
+  curveVertex(firstX, firstY);
+  
+  let lastX;
+  let lastY;
+  
+  let dampingFactor = 0.6; // Lower values make it less reactive
+  for (let i = 0; i < spectrum.length / 4; i+=5)
+  {
+    let x = map(i , 0, spectrum.length / 4, 0, width);
+    
+    let y = map(spectrum[i] * dampingFactor, 0, 125, height - 8, 20);
+    
+    curveVertex(x, y);
+    
+    lastX = x;
+    lastY = y;
+  }
+  curveVertex(lastX, lastY);
+  curveVertex(lastX, lastY);
+  curveVertex(lastX, lastY);
+  
+  vertex(width, height);
+  
+  endShape(CLOSE);
 }

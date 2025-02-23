@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>entrapped. - (3D art)</title>
+	<title>Something Better - (Images, Video, & Sound Art)</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -19,21 +19,23 @@
         crossorigin="anonymous"></script>
 	<!-- Load p5.js library -->
 	<script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/addons/p5.sound.min.js"></script>
+
+	<script src="p5.sound.min.js"></script>
 
 	<!-- Link to javascript files - DEFER waits until all elements are rendered -->
-    <!-- <script type="text/javascript" src="../js/site.js" DEFER></script> -->
+    <script type="text/javascript" src="../js/site.js" DEFER></script>
 	<!-- Use me for a JavaScript OOP Project -->
-	<!-- <script type="text/javascript" src="./js/project.js" DEFER></script> -->
+	<script type="text/javascript" src="./js/project.js" DEFER></script>
 	<!-- Use me for a p5.js project -->
 	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
+
 </head>
 <body>
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
 
-			<h1>Experiment 5 - 3D Art</h1>
+			<h1>Experiment 4 - Images, Video, & Sound Art</h1>
 
 			<div class="minor-section">
 				<div id="canvas-container">
@@ -46,28 +48,31 @@
 
 			<div class="minor-section">
 				<h2>Description</h2>
-				<p>For this Experiment, Ashley Knapp and Nathaniel Valdenor worked together to create and modify a shader to adjust the color and shape of a cube and a torus.
-					Inside the cube is Mario from the hit-game franchise Super Mario Bros., and in the torus is Remy from Disney Pixar's Ratatouille. All of the objects have a floating effect,
-					and the 3D objects rotate on their own individual points. If the user clicks, it switches the textures of the cube and the torus.
+				<p>
+					This Experiment plays Kermit and Rowlf's 'I Hope that Somethin' Better Comes Along', and the song affects both the background and soundwaves.
+					The soundwaves' color- and very slightly, opacity- changes depending on the current frequency of the song. The background's dimness is affected
+					by the volume of the song at the time. The song itself could be found as controversial, but The Muppets original movie from 1979 is a comfort movie of mine,
+					and I grew up on these songs. I found that this song was the most interesting in terms of using it with an audial-visual medium.
 				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Technical</h2>
-				<p>Ashley started off by creating a water shader and modifying it for a cube, and Nathaniel followed afterwards and modified the same shader and added that to the torus.
-					The modifications included base/peak colors, tiling, manipulation speed, and alpha (opacity) value. Each shape has their own color changing functions, as we noticed that
-					the settings for the shader don't look the same on each shape.
+				<p>
+					As previously mentioned, the soundwaves' color is affected by the frequencies. The lower frequencies adjust the color to lean towards the brown shade that Rowlf is,
+					while the higher frequencies are reserved for a Kermit shade of green. In the medium frequencies, the colors mix. For the opacity of the background, I simply added a
+					black rectangle, and adjusted its opacity using the volume of the song. As you can see, I adjusted the waves so that they are smoother and don't peak too high, as I wanted
+					the image to still be visible even with the waves reacting a lot. I also have the song looped using the loop() function from the p5.js sound library.
 				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>As our first Experiment working with one another- or with somebody else at all- in this class, we felt that it went very smoothly. Though it may have helped that we were already
-					friends who were used to pair programming with each other prior to working on this. Ashley was very excited to work on shaders for the first time, so they had a lot of fun with
-					it, and found that this project was a very nice introduction. What helped Ashley the most on this project was playing around with simple vertex and fragment shaders, as well as
-					referring to a tutorial and example she found. For Nathaniel, it was also his first time working with shaders, and found that Ashley's initial idea of the experiment was really
-					entertaining and would be a good way to also start learning about shaders. Nathaniel was able to pick up where Ashley left off very smoothly, but not in a way that either of them
-					didn't do as much as the other in terms of work load. All in all, working with one another was both fun and very efficient.
+				<p>In this Experiment, I simply just wanted to see how it felt to work with an audio visualizer, as I've never
+					had the chance to do that before. I definitely could have spent more time on this, but recently I've had higher priorities,
+					so I understand that this could have been more polished had I had the time. Despite that, I can appreciate the way that I was
+					able to utilize the p5.js sound library in particular for this project, and I feel comfortable incorporating more of it in the
+					near future, possibly on the next Experiment.
 				</p>
 			</div>
 

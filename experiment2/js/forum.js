@@ -1,7 +1,7 @@
 class Forum {
   constructor(sites) {
     this.sites = sites;
-    this.pos = this.calculateCenter();
+    this.center = this.calculateCenter();
     this.radius = this.calculateRadius();
   }
   
@@ -21,18 +21,15 @@ class Forum {
     let maxDist = 0;
     
     for (let site of this.sites) {
-      let dist = this.pos.dist(site.pos);
+      let dist = this.center.dist(site.pos);
       maxDist = Math.max(maxDist, dist);
     }
     return maxDist;
   }
   
   display() {
-    if (this.sites.length >=3)
-    {
-      noStroke();
-      fill(255, 75);
-      ellipse(this.center.x, this.center.y, this.radius * 2);
-    }
+    noStroke();
+    fill(255, 75);
+    ellipse(this.center.x, this.center.y, this.radius * 2);
   }
 }

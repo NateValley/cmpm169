@@ -15,13 +15,12 @@ class World {
     this.sites = [];
     this.sources = [];
     this.forums = [];
-    this.convertedForums = [];
     
     this.threshold = 100;
     
     // WORLD SIZES
-    this.sizeX = canvasContainer.width();
-    this.sizeY = canvasContainer.height();
+    this.sizeX = 1800;
+    this.sizeY = 600;
   }
   
   // Create random point in world
@@ -100,30 +99,24 @@ class World {
     let newSite = new Site(x, y, world, owner, color);
     this.sites.push(newSite);
     
-    // this.forumCheck(newSite);
-    return newSite;
+    this.forumCheck(newSite);
   }
   
-//   // Check for Forum conditions
-//   forumCheck(newSite) {
-//     let nearbySites = this.sites.filter(site => site != newSite && newSite.pos.dist(site.pos) <= 100 && site.owner == newSite.owner);
+  // Check for Forum conditions
+  forumCheck(newSite) {
+    let nearbySites = this.sites.filter(site => site != newSite && newSite.pos.dist(site.pos) <= 100 && site.owner == newSite.owner);
     
-//     if (nearbySites.length >= 3) {
-//       let sites = [];
-      
-//       for (var site in nearbySites)
-//       {
-//         sites.push(site);
-//       }
-//       this.formForum(sites);
-//     }
-//   }
+    if (nearbySites.length >= 2) {
+      let sites = [newSite, nearbySites[0], nearbySites[1]];
+      this.formForum(sites);
+    }
+  }
   
   // Add Forum to world
-  addForum(sites) {
+  formForum(sites) {
     let newForum = new Forum(sites);
     if (newForum) {
-      return newForum;
+      this.forums.push(newForum);
     }
   }
   
@@ -148,19 +141,15 @@ class World {
   
   // Start a world with random Mems
   start() {
-    this.startMems(1, 1, 1, 0);
-    this.startSources(40);
+    this.startMems(8, 6, 4, 8);
+    this.startSources(12);
   }
   
   update() {   
     for (let mem of this.mems) {
       mem.update();
     }
-    // console.log(this.mems);
-    
-    for (let site of this.sites) {
-      site.update();
-    }
+    console.log(this.mems);
   }
   
   display() {
@@ -170,7 +159,9 @@ class World {
     for (let site of this.sites) {
       site.display();
     }
-
+    for (let forum of this.forums) {
+      forum.display();
+    }
     for (let source of this.sources) {
       source.display();
     }

@@ -11,21 +11,6 @@ class Site {
     this.isUnderAttack = false;
     this.color = color;
     this.world = world;
-    
-    switch (this.owner)
-    {
-      case 'Type1':
-        this.waitTime = 3;
-        break;
-      case 'Type2':
-        this.waitTime = 6;
-        break;
-      case 'Type3':
-        this.waitTime = 6;
-        break;
-    }
-    this.waitConvert = this.waitTime * 1000;
-    this.spawnCooldown = null;
   }
   
   // Capture this site
@@ -34,22 +19,6 @@ class Site {
     this.owner = newOwner;
     this.color = newColor;
     this.UnderAttack = false;
-  }
-  
-  update() {
-    
-    if (!this.spawnCooldown)
-    {
-      this.spawnCooldown = Date.now();
-    }
-    else
-    {
-      if (Date.now() - this.spawnCooldown >= this.waitConvert)
-      {
-        this.world.addMem(this.pos.x, this.pos.y, this.owner);
-        this.spawnCooldown = null;
-      }
-    }
   }
   
   // Display

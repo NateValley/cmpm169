@@ -8,14 +8,11 @@ class Mem {
     this.pos = createVector(x, y);
     this.type = type;
     this.world = world;
-    this.speed = 1.5;
+    this.speed = 1;
     this.color = color;
-    this.size = 10;
 
     this.homeForum = null;
-    this.resources = 0;
-    this.resourceCap = 12;
-    this.gatherWait = 1;
+    this.resources = 3;
     this.moveTarget = this.randomPoint();
 
     // COMBAT
@@ -24,7 +21,22 @@ class Mem {
     this.attacker = null;
     
     // STATE MACHINE
-    this.currentState = new DefaultState(this);
+    switch (type) {
+      case 'Type1':
+        this.currentState = new Type1ExploringState(this);
+        break;
+      case 'Type2':
+        this.currentState = new Type2ExploringState(this);
+        break;
+      case 'Type3':
+        this.currentState = new Type3ExploringState(this);
+        break;
+      case 'Type4':
+        this.currentState = new Type4PillagingState(this);
+        break;
+      default:
+        this.currentState = new ExploringState(this);
+    }
   }
 
   // UPDATE =====================================================
@@ -32,6 +44,10 @@ class Mem {
   update() {
     if (this.currentState) {
       this.currentState.update();
+    }
+    
+    if (this.pos.dist(this.moveTarget) > 4) {
+      this.moveTo(this.moveTarget);
     }
   }
   
@@ -48,35 +64,15 @@ class Mem {
   
   // BASIC FUNCTIONS ======================================================
   
-  // // Find all nearby objects
-  // findNearby() {
-  //   if (!this.world || !this.world.mems) {
-  //     console.warn("World or Mems are not properly initialized!");
-  //     return [];
-  //   }
-  //   return this.world.mems.filter((obj) => this.pos.dist(obj.pos));
-  // }
-
-  findMems() {
-    return this.world.mems;
+  // Find all nearby objects
+  findNearby() {
+    if (!this.world || !this.world.mems) {
+    console.warn("World or Mems are not properly initialized!");
+    return [];
+  }
+    return this.world.mems.filter((obj) => this.pos.dist(obj.pos) <= 200);
   }
 
-  findSources() {
-    return this.world.sources;
-  }
-  
-  findGroups() {
-    return this.world.groups;
-  }
-  
-  findSites() {
-    return this.world.sites;
-  }
-  
-  findForums() {
-    return this.world.forums;
-  }
-  
   // Movement
   moveTo(target) {
     this.pos.add(p5.Vector.sub(target, this.pos).setMag(this.speed));
@@ -84,8 +80,8 @@ class Mem {
 
   // Random movement point
   randomPoint() {
-    let randomX = Math.random() * canvasContainer.width(); // Random X within a range
-    let randomY = Math.random() * canvasContainer.height(); // Random Y within a range
+    let randomX = Math.random() * 790; // Random X within a range
+    let randomY = Math.random() * 590; // Random Y within a range
 
     let randomPoint = createVector(randomX, randomY);
     return randomPoint;
@@ -112,13 +108,14 @@ class Mem {
 
   // Build a site
   build() {
-    return this.world.addSite(
+    this.world.addSite(
       this.pos.x,
       this.pos.y,
       this.world,
       this.type,
       this.color
     );
+    this.resources -= 3;
   }
 
 
@@ -132,16 +129,16 @@ class Mem {
   }
 
   // Defend
-  // defend() {
-  //   let mems = this.findMems();
-  //   let nearbyType = nearby.filter(
-  //     (obj) => obj.type == this.type && obj.isUnderAttack
-  //   );
+  defend() {
+    let nearby = this.findNearby();
+    let nearbyType = nearby.filter(
+      (obj) => obj.type == this.type && obj.isUnderAttack
+    );
 
-  //   for (let ally of nearbyType) {
-  //     this.attack(ally.attacker);
-  //   }
-  // }
+    for (let ally of nearbyType) {
+      this.attack(ally.attacker);
+    }
+  }
 
   // DISPLAY FUNCTION =====================================================
 
@@ -149,7 +146,7 @@ class Mem {
   display() {
     stroke(0);
     fill(this.color);
-    ellipse(this.pos.x, this.pos.y, this.size, this.size);
+    ellipse(this.pos.x, this.pos.y, 10, 10);
   }
 }
 
@@ -159,23 +156,19 @@ class Type1 extends Mem {
   constructor(x, y, world) {
     super(x, y, world, 'Type1', 'maroon');
     this.group = null;
-    this.size = 8;
-    this.speed = 2;
   }
 }
 
 class Type2 extends Mem {
   constructor(x, y, world) {
-    super(x, y, world, 'Type2', 'green');
-    this.size = 12;
-    this.resourceCap = 24;
-    this.gatherWait = 0.2;
+    super(x, y, world, 'Type2', 'blue');
   }
 }
 
 class Type3 extends Mem {
   constructor(x, y, world) {
     super(x, y, world, 'Type3', 'orange');
+    this.memThreshold = 5;
   }
 }
 
