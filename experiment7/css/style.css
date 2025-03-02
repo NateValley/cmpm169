@@ -7,9 +7,60 @@ canvas {
 }
 
 /* Center the canvas element on the page */
-body {
-    display: flex;
+html, body {
+	margin: 0;
+	padding: 0;
 	width: 100vw;
+	height: 100vh;
+	font-family: Arial, sans-serif;
+}
+
+#container {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+}
+
+#spotify-ui {
+	width: 40%;
+	background-color: #181818;
+	color: white;
+	padding: 20px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#spotify-ui button {
+	background-color: #1DB954;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	margin: 10px;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+#spotify-ui button:hover {
+	background-color: #1aa343;
+}
+
+#tracksList {
+	list-style: none;
+	padding: 0;
+	width: 100%;
+	text-align: center;
+}
+
+#tracksList li {
+	padding: 10px;
+	border-bottom: 1px solid #333;
+}
+
+#mapbox {
+	width: 60%;
 	height: 100vh;
 }
 

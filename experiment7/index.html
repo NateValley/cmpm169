@@ -8,20 +8,29 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
     
-	
     <style>
       #mapbox { width: 100vw; height: 100vh; }
     </style>
     
-    
-    
   </head>
   <body>
+    <div id="container">
+		
+		<!-- Spotify UI -->
+		 <div id="spotify-ui">
+			<h1>Spotify Stuff</h1>
+			<button id="login-button">Login with Spotify</button>
+			<div id="user-info" style="display: none;">
+				<p>What's up, <span id="username"></span>?</p>
+			</div>
+			<ul id="tracksList"></ul>
+		 </div>
+
+		 <!-- Mapbox -->
+		  <div id="mapbox"></div>
+	</div>
     
-    <div id="mapbox"></div>
-    
-    <main>
-    </main>
+	<script src="./js/spotify-api.js"></script>
 	<script src="./js/spotify.js"></script>
     <script src="./js/map.js"></script>
   </body>

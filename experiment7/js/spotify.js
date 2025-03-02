@@ -1,62 +1,41 @@
-var client_id = '42a7f5d1899844ccbf8a184bf775a00e';
-var client_secret = '24d3e47601c04cdd92cc3d1608428a63';
-var redirect_uri = 'http://localhost:8080/callback';
+const CLIENT_ID = APIController.getClientID();
+const REDIRECT_URI = 'http://localhost:5500/experiment7/index.html'; // Change this to your actual redirect URI
+const SCOPES = 'user-read-private user-read-recently-played';
 
-var express = require('express');
-var querystring = require('querystring');
-var app = express();
+const loginButton = document.getElementById("login-button");
+const userInfo = document.getElementById("user-info");
+const usernameDisplay = document.getElementById("username");
 
-function generateRandomString(length) {
-	let text = '';
-	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	for (let i = 0; i < length; i++) {
-	  text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
+const getTokenFromURL = () => {
+	const hash = window.location.hash.substring(1);
+	const params = new URLSearchParams(hash);
+	return params.get("access_token");
 }
 
-app.get('/login', function(req, res) {
+const accessToken = localStorage.getItem("spotify_token") || getTokenFromURL();
 
-	var state = generateRandomString(16);
-	var scope = 'user-read-private user-read-email';
-  
-	res.redirect('https://accounts.spotify.com/authorize?' +
-		querystring.stringify({
-			response_type: 'code',
-			client_id: client_id,
-			scope: scope,
-			redirect_uri: redirect_uri,
-			state: state
-		}));
-});
+if ( accessToken ) {
+	localStorage.setItem("spotify_token", accessToken);
+	window.history.replaceState( {}, document.title, window.location.pathname );
 
-app.get('/callback', function(req, res) {
+	loginButton.style.display = "none";
+	userInfo.style.display = "block";
 
-	var code = req.query.code || null;
-	var state = req.query.state || null;
-  
-	if (state === null) {
-	  res.redirect('/#' +
-		querystring.stringify({
-		  error: 'state_mismatch'
-		}));
-	} else {
-	  var authOptions = {
-		url: 'https://accounts.spotify.com/api/token',
-		form: {
-		  code: code,
-		  redirect_uri: redirect_uri,
-		  grant_type: 'authorization_code'
-		},
-		headers: {
-		  'content-type': 'application/x-www-form-urlencoded',
-		  'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
-		},
-		json: true
-	  };
-	}
-});
+	// Fetch User Profile
+	APIController.getUserProfile(accessToken)
+		.then(data => {
+			usernameDisplay.textContent = data.display_name || "Spotify User";
+		})
+		.catch(err => console.error("Error fetching user data:", err));
+} else {
+	loginButton.style.display = "block";
+	userInfo.style.display = "none";
+}
 
-app.listen(8080, () => {
-	console.log('Server running on http://localhost:8080');
-});
+// Login Function
+const loginSpotify = () => {
+	const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPES)}`;
+    window.location.href = authUrl;
+}
+
+document.getElementById("login-button").addEventListener("click", loginSpotify);
