@@ -25,6 +25,7 @@ const saveTrack = async (userID, city, recentTrack) => {
 			timestamp: firebase.firestore.Timestamp.now()
 		});
 
+		displayCityData(window.userCity);
 		console.log("Track saved successfully!");
 
 	} catch (e) {
