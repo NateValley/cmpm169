@@ -8,9 +8,6 @@ const mapbox = new mapboxgl.Map({
 	zoom: 3
 });
 
-// Find city by current location
-navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
-
 function geoSuccess(position) {
 	const latitude = position.coords.latitude;
 	const longitude = position.coords.longitude;
@@ -18,7 +15,7 @@ function geoSuccess(position) {
 }
 
 function geoError() {
-	console.error("Unable to retrieve location.");
+	console.warn("Unable to retrieve location.");
 }
 
 const cityDisplay = document.querySelectorAll(".user-city");
@@ -50,3 +47,140 @@ const getCityFromCoords = async (lat, lon) => {
 		console.error("Error fetching city:", error);
 	}
 }
+
+// -----------------------------------------------------
+// ---- Geolocation ----
+// -----------------------------------------------------
+// Add GeolocateControl to the map
+const geolocateControl = new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: false
+    },
+    trackUserLocation: false, // Continuously track user location
+    showUserHeading: false, // Display user's heading direction
+	showUserLocation: true,
+});
+
+// Center the map on the user's location once located
+geolocateControl.on('geolocate', (e) => {
+	const userLocation = [e.coords.longitude, e.coords.latitude];
+    mapbox.flyTo({ center: userLocation, zoom: 7 });
+	// geolocateControl.trackUserLocation = true;
+	geolocateControl.showUserLocation = true;
+	usingGeoLoc = true;
+	// console.log("turning ON location tracking");
+
+	// Call geoSuccess with the position
+    geoSuccess(e);
+});
+
+// Handle error
+geolocateControl.on('error', (err) => {
+    console.error("Geolocation error:", err);
+    geoError(err);
+});
+
+// Add the geoLocation button to the map
+mapbox.addControl(geolocateControl);
+
+
+// -----------------------------------------------------
+// ---- Select Location ----
+// -----------------------------------------------------
+const radiusInKm = 15; // Set the radius of drawn circle in kilometers
+let marker = null;
+let circleSourceId = "circle-source";
+let circleLayerId = "circle-layer";
+let usingGeoLoc = false;
+
+// Handle user click to place marker and circle
+mapbox.on("click", (e) => {
+	
+
+    const clickedCoords = [e.lngLat.lng, e.lngLat.lat];
+	getCityFromCoords(clickedCoords[1], clickedCoords[0]);
+	
+    // Remove old marker and circle if it exists
+    removePinGraphics();
+	
+    // Place a new marker
+    marker = new mapboxgl.Marker().setLngLat(clickedCoords).addTo(mapbox);
+    console.log("Marker placed at:", clickedCoords);
+
+
+	// Hide user location puck when map is clicked
+	// [WIP] doesn't work
+	if (usingGeoLoc) {
+		geolocateControl.trackUserLocation = false;
+		geolocateControl.showUserLocation = false;
+		// console.log("turning Off location tracking");
+		usingGeoLoc = false;
+	}
+
+    const circleGeoJSON = createGeoJSONCircle(clickedCoords, radiusInKm);
+
+    // Add the circle to the map
+    mapbox.addSource("circle", circleGeoJSON);
+
+    mapbox.addLayer({
+        "id": "circle-layer",
+        "type": "fill",
+        "source": "circle",
+        "paint": {
+            "fill-color": "rgb(0, 174, 255)",
+            "fill-opacity": 0.3,
+        }
+    });
+
+});
+
+function removePinGraphics() {
+	if (marker) marker.remove();
+	if (mapbox.getLayer("circle-layer")) {
+        mapbox.removeLayer("circle-layer");
+    }
+    if (mapbox.getSource("circle")) {
+        mapbox.removeSource("circle");
+    }
+}
+
+// Code from:
+// https://stackoverflow.com/questions/37599561/drawing-a-circle-with-the-radius-in-miles-meters-with-mapbox-gl-js/39006388#39006388
+const createGeoJSONCircle = function(center, radiusInKm, points) {
+    if(!points) points = 64;
+
+    let coords = {
+        latitude: center[1],
+        longitude: center[0]
+    };
+
+    let km = radiusInKm;
+
+    let ret = [];
+    let distanceX = km/(111.320*Math.cos(coords.latitude*Math.PI/180));
+    let distanceY = km/110.574;
+
+    let theta, x, y;
+    for(let i=0; i<points; i++) {
+        theta = (i/points)*(2*Math.PI);
+        x = distanceX*Math.cos(theta);
+        y = distanceY*Math.sin(theta);
+
+        ret.push([coords.longitude+x, coords.latitude+y]);
+    }
+    ret.push(ret[0]);
+
+    return {
+        "type": "geojson",
+        "data": {
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [ret]
+                }
+            }]
+        }
+    };
+};
