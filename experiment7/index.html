@@ -12,26 +12,52 @@
       #mapbox { width: 100vw; height: 100vh; }
     </style>
     
+	<!-- FireBase API -->
+	<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
   </head>
   <body>
     <div id="container">
 		
 		<!-- Spotify UI -->
 		 <div id="spotify-ui">
+			
 			<h1>Spotify Stuff</h1>
+			
 			<button id="login-button">Login with Spotify</button>
-			<div id="user-info" style="display: none;">
+			
+			<div id="user-info" style="display: none">
+				<img id="profile-pic" alt="Profile Picture" width="150" height="150">
 				<p>What's up, <span id="username"></span>?</p>
 			</div>
-			<ul id="tracksList"></ul>
+
+			<div id="recent-tracks" style="display: none">
+				<img id="most-recent-pic" alt="Recent Track Picture" width="150" height="150">
+				<p>Your most recently played track was: <span id="most-recent"></span></p>
+			
+				<button id="log-track-button">Log this track into <span class="user-city"></span></button>
+			</div>
+			
+			<div id="city-ui">
+
+				<h2>Recent Tracks in <span class="user-city"></span></h2>
+				<button id="refresh-city-button">Refresh</button>
+
+				<ul id="city-tracks"></ul>
+	
+			</div>
+
 		 </div>
 
 		 <!-- Mapbox -->
+
 		  <div id="mapbox"></div>
 	</div>
     
 	<script src="./js/spotify-api.js"></script>
 	<script src="./js/spotify.js"></script>
-    <script src="./js/map.js"></script>
+    <script src="./js/mapbox.js"></script>
+	<script type="module" src="./js/firebase.js"></script>
   </body>
 </html>

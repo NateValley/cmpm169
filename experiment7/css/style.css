@@ -29,6 +29,7 @@ html, body {
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
+	text-align: center;
 	align-items: center;
 }
 
@@ -47,16 +48,42 @@ html, body {
 	background-color: #1aa343;
 }
 
-#tracksList {
-	list-style: none;
+#city-ui {
+	width: 90%;
+	background-color: #181818;
+	color: white;
+	padding: 20px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+#city-tracks {
+	list-style-type: none;
 	padding: 0;
-	width: 100%;
 	text-align: center;
 }
 
-#tracksList li {
+.track-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
 	padding: 10px;
-	border-bottom: 1px solid #333;
+	background: #1e1e1e;
+	border-radius: 5px;
+}
+
+.track-item img {
+	width: 50px;
+	height: 50px;
+	border-radius: 5px;
+}
+
+.track-item a {
+	text-decoration: none;
+	color: white;
+	font-weight: bold;
 }
 
 #mapbox {
