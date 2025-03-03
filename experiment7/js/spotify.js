@@ -1,6 +1,6 @@
 const CLIENT_ID = APIController.getClientID();
 const REDIRECT_URI = 'https://natevalley.github.io/cmpm169/experiment7/index.html'; // Change this to your actual redirect URI
-const SCOPES = 'user-read-private user-read-recently-played';
+const SCOPES = 'user-read-private user-read-email user-read-recently-played';
 
 const loginButton = document.getElementById("login-button");
 
